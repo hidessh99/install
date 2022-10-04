@@ -353,8 +353,6 @@ chmod +x cff
 chmod +x cfh
 chmod +x autoreboot
 
-#auto reboot cronjob
-echo "50 * * * * root userdelexpired" >> /etc/crontab
 
 # finishing
 cd
