@@ -393,6 +393,8 @@ chown -R www-data:www-data /home/vps/public_html
 /etc/init.d/stunnel4 restart
 #/etc/init.d/squid restart
 
+
+echo "0 5 * * * root clear-log && reboot" >> /etc/crontab
 echo "0 1 * * * root userdelexpired" >> /etc/crontab
 
 history -c
