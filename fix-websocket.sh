@@ -2,7 +2,7 @@
 # ==========================================
 
 #pkill python
-pkill python ws-tls 
+pkill ws-tls 
 systemctl daemon-reload
 systemctl stop ws-tls 
 systemctl stop sslh
