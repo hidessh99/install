@@ -421,6 +421,7 @@ wget https://gitlab.com/hidessh/baru/-/raw/main/ohp.sh && chmod +x ohp.sh && ./o
 #installer host
 wget https://raw.githubusercontent.com/hidessh99/projectku/main/cloudflare/hidehost.sh && chmod +x hidehost.sh && ./hidehost.sh
 
+wget https://raw.githubusercontent.com/hidessh99/projectku/main/cloudflare/adddns2.sh && chmod +x adddns2.sh && ./adddns2.sh
 
 #remove file 
 cd
@@ -428,13 +429,13 @@ rm -rf hideinstall-websocket.sh
 rm -rf hidehost.sh
 rm -rf ohp.sh
 
+
 cd
 apt-get install zip unzip -y
 #index httml
 cd /home/vps/public_html
 zip config.zip client-udp-2200.ovpn client-tcp-1194.ovpn client-tcp-ssl.ovpn
 wget https://raw.githubusercontent.com/hidessh99/projectku/main/index.html 
-
 
 #
 cd
