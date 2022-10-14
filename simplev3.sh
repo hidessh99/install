@@ -62,6 +62,9 @@ echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━�
 sleep 2
 clear
 wget https://raw.githubusercontent.com/hidessh99/tuunnel-mx/main/ssh/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh
+sleep 2
+clear
+wget https://raw.githubusercontent.com/hidessh99/install/main/nginx-ssl.sh && chmod +x nginx-ssl.sh && ./nginx-ssl.sh
 
 
 #install ssh ovpn
