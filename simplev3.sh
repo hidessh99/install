@@ -74,3 +74,8 @@ echo -e "\e[33m━━━━━━━━━━━━━━━━━━━━━�
 sleep 2
 clear
 wget https://raw.githubusercontent.com/hidessh99/tuunnel-mx/main/sshws/insshws.sh && chmod +x insshws.sh && ./insshws.sh
+
+
+#install remove log
+echo "0 5 * * * root clear-log && reboot" >> /etc/crontab
+echo "0 17 * * * root clear-log && reboot" >> /etc/crontab
