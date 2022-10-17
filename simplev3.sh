@@ -75,6 +75,26 @@ sleep 2
 clear
 wget https://raw.githubusercontent.com/hidessh99/tuunnel-mx/main/sshws/insshws.sh && chmod +x insshws.sh && ./insshws.sh
 
+#exp
+cd /usr/bin
+wget -O userdelexpired "https://gitlab.com/hidessh/baru/-/raw/main/userdelexpired.sh"
+chmod +x userdelexpired
+echo "50 * * * * root userdelexpired" >> /etc/crontab
+
+cd
+
+
+echo "installing insaller Slowdns "
+echo "Progress..."
+echo "Sedang berlangsung..."
+wget https://raw.githubusercontent.com/hidessh99/projectku/main/Slowdns/hidessh-slowdns && chmod +x hidessh-slowdns && ./hidessh-slowdns
+sleep 1
+
+
+cd
+#installer OPH
+wget https://gitlab.com/hidessh/baru/-/raw/main/ohp.sh && chmod +x ohp.sh && ./ohp.sh
+
 
 #install remove log
 echo "0 5 * * * root clear-log && reboot" >> /etc/crontab
