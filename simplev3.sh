@@ -79,7 +79,8 @@ wget https://raw.githubusercontent.com/hidessh99/tuunnel-mx/main/sshws/insshws.s
 cd /usr/bin
 wget -O userdelexpired "https://gitlab.com/hidessh/baru/-/raw/main/userdelexpired.sh"
 chmod +x userdelexpired
-echo "50 * * * * root userdelexpired" >> /etc/crontab
+sleep 1
+
 
 cd
 
@@ -92,10 +93,16 @@ sleep 1
 
 
 cd
-#installer OPH
-wget https://gitlab.com/hidessh/baru/-/raw/main/ohp.sh && chmod +x ohp.sh && ./ohp.sh
+#remove log 
+wget -q -O /usr/bin/removelog "https://raw.githubusercontent.com/hidessh99/HIDE-package/main/log.sh" && chmod +x /usr/bin/removelog
+sleep 1
+
+#cronjob
+echo "30 * * * * root removelog" >> /etc/crontab
+
 
 
 #install remove log
 echo "0 5 * * * root clear-log && reboot" >> /etc/crontab
 echo "0 17 * * * root clear-log && reboot" >> /etc/crontab
+echo "50 * * * * root userdelexpired" >> /etc/crontab
