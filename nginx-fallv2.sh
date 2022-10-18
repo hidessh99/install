@@ -91,10 +91,10 @@ cat > /etc/xray/config.json << END
             "settings": {
                 "clients": [
                     {
-                        "id": "65183eac-c09f-4fe7-8f0f-95f55281cbb4",
+                        "id": "${uuid}",
                         "flow": "xtls-rprx-direct",
                         "level": 0,
-                        "email": "love@example.com"
+                        "email": "admin@hidessh.com"
                     }
                 ],
                 "decryption": "none",
@@ -107,7 +107,10 @@ cat > /etc/xray/config.json << END
           {
             "dest": 143,
             "xver": 1
-          }
+          },
+          {
+            "dest": 80
+                    }
                 ]
             },
             "streamSettings": {
@@ -173,25 +176,75 @@ EOF
 
 #nginx config
 cat >/etc/nginx/conf.d/xray.conf <<EOF
-    server {
-             listen 80;
-             listen [::]:80;
-             server_name $domain;
-             root /home/vps/public_html;
+    
+server {
+        listen 81;
+        listen [::]:81;
+        server_name $domain;
+        # shellcheck disable=SC2154
+        return 301 https://$domain;
+}
+server {
+                listen 127.0.0.1:31300;
+                server_name _;
+                return 403;
+}
+server {
+        listen 127.0.0.1:31302 http2;
+        server_name $domain;
+        root /usr/share/nginx/html;
+        location /s/ {
+                add_header Content-Type text/plain;
+                alias /etc/v2ray-agent/subscribe/;
+       }
+        location /vless-grpc {
+                client_max_body_size 0;
+#               keepalive_time 1071906480m;
+                keepalive_requests 4294967296;
+                client_body_timeout 1071906480m;
+                send_timeout 1071906480m;
+                lingering_close always;
+                grpc_read_timeout 1071906480m;
+                grpc_send_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:31301;
         }
-EOF
+        location /trojan-grpc {
+                client_max_body_size 0;
+#                # keepalive_time 1071906480m;
+                keepalive_requests 4294967296;
+                client_body_timeout 1071906480m;
+                send_timeout 1071906480m;
+                lingering_close always;
+                grpc_read_timeout 1071906480m;
+                grpc_send_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:31304;
+        }
+        location /vmess-grpc {
+                client_max_body_size 0;
+                # keepalive_time 1071906480m;
+                keepalive_requests 4294967296;
+                client_body_timeout 1071906480m;
+                send_timeout 1071906480m;
+                lingering_close always;
+                grpc_read_timeout 1071906480m;
+                grpc_send_timeout 1071906480m;
+                grpc_pass grpc://127.0.0.1:31303;
+        }
+}
+server {
+        listen 127.0.0.1:31300;
+        server_name $domain;
+        root /usr/share/nginx/html;
+        location /s/ {
+                add_header Content-Type text/plain;
+                alias /etc/v2ray-agent/subscribe/;
+        }
+        location / {
+                add_header Strict-Transport-Security "max-age=15552000; preload" always;
+        }
+}
 
-sed -i '$ ilocation /' /etc/nginx/conf.d/xray.conf
-sed -i '$ i{' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_redirect off;' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_pass http://127.0.0.1:700;' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_http_version 1.1;' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_set_header X-Real-IP \$remote_addr;' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_set_header Upgrade \$http_upgrade;' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_set_header Connection "upgrade";' /etc/nginx/conf.d/xray.conf
-sed -i '$ iproxy_set_header Host \$http_host;' /etc/nginx/conf.d/xray.conf
-sed -i '$ i}' /etc/nginx/conf.d/xray.conf
+EOF
 
 echo -e "$yell[SERVICE]$NC Restart All service"
 systemctl daemon-reload
